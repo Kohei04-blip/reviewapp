@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ノード一覧</title>
+</head>
+<body>
+
+<h1>ノード一覧</h1>
+
+<ul>
+    <li th:each="node : ${nodes}">
+        <span th:text="${node.title}"></span>
+    </li>
+</ul>
+
+</body>
+</html>
