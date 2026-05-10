@@ -15,8 +15,8 @@ public class Node {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
     private Long id;
-
     private String title;
     private String content;
     private LocalDate learnedAt;
@@ -41,4 +41,13 @@ public class Node {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
 }

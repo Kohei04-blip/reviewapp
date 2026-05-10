@@ -19,4 +19,27 @@ public class NodeService {
     public List<Node> findAll() {
         return nodeRepository.findAll();
     }
+
+    public void create(String title, String content) {
+        Node node = new Node();
+        node.setTitle(title);
+        node.setContent(content);
+        nodeRepository.save(node);
+    }
+
+    public Node findById(Long id) {
+        return nodeRepository.findById(id).orElse(null);
+    }
+
+    public void update(Long id, String title, String content){
+        Node node = nodeRepository.findById(id).orElse(null);
+        node.setTitle(title);
+        node.setContent(content);
+        nodeRepository.save(node);
+    }
+
+    public void delete(Long id) {
+        nodeRepository.deleteById(id);
+    }
+
 }
