@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import com.example.reviewapp.dto.NodeForm;
 
 import com.example.reviewapp.entity.Node;
+import com.example.reviewapp.service.AiService;
 import com.example.reviewapp.service.NodeService;
 
 @Controller
@@ -21,10 +22,12 @@ public class NodeController{
 
     //メンバ変数
     private final NodeService nodeService;
+    private final AiService aiService;
     
     //コンストラクタ
-    public NodeController(NodeService nodeService){
+    public NodeController(NodeService nodeService ,AiService aiService){
         this.nodeService = nodeService;
+        this.aiService = aiService;
     }
 
     //一覧を表示するメソッド
@@ -92,7 +95,20 @@ public class NodeController{
     public String delete(@PathVariable Long id) {
         nodeService.delete(id);
         return "redirect:/nodes";
-}
+    }
+
+    //AI補正メソッド
+    @PostMapping("/{id}/ai-correct")
+    public String aiCorrect(@PathVariable Long id ,NodeForm nodeForm ,Model model) {
+        String correctedContent = aiService.correctContent(nodeForm.getContent());
+
+        nodeForm.setContent(correctedContent);
+
+        model.addAttribute("nodeForm", nodeForm);
+        model.addAttribute("nodeId", id);
+
+        return "nodes/edit";
+    }
 
 
 }
