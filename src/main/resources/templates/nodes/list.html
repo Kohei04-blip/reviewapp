@@ -15,6 +15,13 @@
         <a href="/nodes/new" class="btn btn-primary">新規登録</a>
     </div>
 
+    <form action="/nodes" method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="keyword" class="form-control" placeholder="キーワードで検索" th:value="${keyword}">
+            <button type="submit" class="btn btn-outline-primary">検索</button>
+        </div>
+    </form>
+
     <div th:if="${#lists.isEmpty(nodes)}" class="alert alert-info">
         まだノードが登録されていません。
     </div>

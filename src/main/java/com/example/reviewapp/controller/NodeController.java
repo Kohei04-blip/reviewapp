@@ -32,9 +32,10 @@ public class NodeController{
 
     //一覧を表示するメソッド
     @GetMapping
-    public String findAll(Model model){
-        List<Node> nodes = nodeService.findAll();
+    public String findAll(Model model ,String keyword){
+        List<Node> nodes = nodeService.findAll(keyword);
         model.addAttribute("nodes", nodes);
+        model.addAttribute("keyword", keyword);
         return "nodes/list";
     }
 

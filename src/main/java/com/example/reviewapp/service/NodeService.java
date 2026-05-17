@@ -16,8 +16,15 @@ public class NodeService {
         this.nodeRepository = nodeRepository;
     }
 
-    public List<Node> findAll() {
-        return nodeRepository.findAll();
+    public List<Node> findAll(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            return nodeRepository.findAll();
+        } else {
+            return nodeRepository.findByTitleContainingOrContentContaining(
+                keyword,
+                keyword
+            );
+        }
     }
 
     public void create(String title, String content) {
