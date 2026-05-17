@@ -5,15 +5,19 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.reviewapp.entity.Node;
+import com.example.reviewapp.entity.Category;
+import com.example.reviewapp.repository.CategoryRepository;
 import com.example.reviewapp.repository.NodeRepository;
 
 @Service
 public class NodeService {
 
     private final NodeRepository nodeRepository;
+    private final CategoryRepository categoryRepository;
 
-    public NodeService(NodeRepository nodeRepository) {
+    public NodeService(NodeRepository nodeRepository ,CategoryRepository categoryRepository) {
         this.nodeRepository = nodeRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Node> findAll(String keyword) {
@@ -27,10 +31,14 @@ public class NodeService {
         }
     }
 
-    public void create(String title, String content) {
+    public void create(String title, String content ,Long categoryId) {
         Node node = new Node();
         node.setTitle(title);
         node.setContent(content);
+        
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        node.setCategory(category);
+        
         nodeRepository.save(node);
     }
 

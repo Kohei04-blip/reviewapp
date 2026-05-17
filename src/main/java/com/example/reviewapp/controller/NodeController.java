@@ -8,13 +8,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
-import com.example.reviewapp.dto.NodeForm;
 
+import com.example.reviewapp.dto.NodeForm;
 import com.example.reviewapp.entity.Node;
+import com.example.reviewapp.entity.Category;
 import com.example.reviewapp.service.AiService;
 import com.example.reviewapp.service.NodeService;
+import com.example.reviewapp.service.CategoryService;
 
 @Controller
 @RequestMapping("/nodes")
@@ -23,12 +26,16 @@ public class NodeController{
     //メンバ変数
     private final NodeService nodeService;
     private final AiService aiService;
+    private final CategoryService categoryService;
     
     //コンストラクタ
-    public NodeController(NodeService nodeService ,AiService aiService){
+    public NodeController(NodeService nodeService ,AiService aiService ,CategoryService categoryService){
         this.nodeService = nodeService;
         this.aiService = aiService;
+        this.categoryService = categoryService;
     }
+
+
 
     //一覧を表示するメソッド
     @GetMapping
@@ -42,7 +49,9 @@ public class NodeController{
     //新規画面を表示するメソッド
     @GetMapping("/new")
     public String newForm(Model model){
-        model.addAttribute("nodeForm",new NodeForm());
+        model.addAttribute("nodeForm",new NodeForm());    
+        List<Category> categories = categoryService.findAll();
+        model.addAttribute("categories" ,categories);
         return "nodes/new";
     }
 
@@ -55,7 +64,7 @@ public class NodeController{
             return "nodes/new";
         }
 
-        nodeService.create(nodeForm.getTitle(), nodeForm.getContent());
+        nodeService.create(nodeForm.getTitle(), nodeForm.getContent() ,nodeForm.getCategoryId());
         return "redirect:/nodes";
     }
 

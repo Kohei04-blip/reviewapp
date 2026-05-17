@@ -31,6 +31,11 @@
             <h5 class="card-title" th:text="${node.title}"></h5>
             <p class="card-text" th:text="${node.content}"></p>
 
+            <p class="text-muted">
+                カテゴリ：
+                <span th:text="${node.category != null ? node.category.name : '未設定'}"></span>
+            </p>
+
             <div class="d-flex gap-2">
                 <a class="btn btn-outline-primary btn-sm"
                    th:href="@{/nodes/{id}/edit(id=${node.id})}">
