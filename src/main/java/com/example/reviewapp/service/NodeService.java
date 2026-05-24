@@ -20,15 +20,32 @@ public class NodeService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Node> findAll(String keyword) {
-        if (keyword == null || keyword.isBlank()) {
-            return nodeRepository.findAll();
-        } else {
+    public List<Node> findAll(String keyword, Long categoryId) {
+
+        boolean hasKeyword = keyword != null && !keyword.isBlank();
+        boolean hasCategory = categoryId != null;
+
+        if (hasKeyword && hasCategory) {
+            return nodeRepository.findByTitleContainingOrContentContainingAndCategory_Id(
+                keyword,
+                keyword,
+                categoryId
+            );
+        } 
+        
+        if (hasKeyword) {
             return nodeRepository.findByTitleContainingOrContentContaining(
                 keyword,
                 keyword
             );
         }
+
+        if (hasCategory) {
+            return nodeRepository.findByCategory_Id(categoryId);
+        }
+
+        return nodeRepository.findAll();
+
     }
 
     public void create(String title, String content ,Long categoryId) {
@@ -46,10 +63,14 @@ public class NodeService {
         return nodeRepository.findById(id).orElse(null);
     }
 
-    public void update(Long id, String title, String content){
+    public void update(Long id, String title, String content, Long categoryId){
         Node node = nodeRepository.findById(id).orElse(null);
         node.setTitle(title);
         node.setContent(content);
+
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        node.setCategory(category);
+        
         nodeRepository.save(node);
     }
 

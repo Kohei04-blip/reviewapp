@@ -15,6 +15,7 @@
             <h1 class="mb-4">ノード編集</h1>
 
             <form th:action="@{/nodes/{id}(id=${nodeId})}" th:object="${nodeForm}" method="post">
+                
                 <div class="mb-3">
                     <label class="form-label">タイトル</label>
                     <input type="text" th:field="*{title}" class="form-control">
@@ -23,6 +24,20 @@
                          th:if="${#fields.hasErrors('title')}"
                          th:errors="*{title}">
                     </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">カテゴリ</label>
+
+                    <select th:field="*{categoryId}" class="form-select">
+                        <option value="">カテゴリを選択</option>
+
+                        <option
+                            th:each="category : ${categories}"
+                            th:value="${category.id}"
+                            th:text="${category.name}">
+                        </option>
+                    </select>
                 </div>
 
                 <div class="mb-3">

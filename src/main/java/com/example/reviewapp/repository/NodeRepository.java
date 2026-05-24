@@ -11,4 +11,12 @@ public interface NodeRepository extends JpaRepository<Node, Long> {
         String content
     );
 
+    List<Node> findByCategory_Id(Long categoryId);
+
+    List<Node> findByTitleContainingOrContentContainingAndCategory_Id(
+        String title,
+        String content,
+        Long categoryId
+    );
+
 }

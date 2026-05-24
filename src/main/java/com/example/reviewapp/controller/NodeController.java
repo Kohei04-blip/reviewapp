@@ -39,10 +39,13 @@ public class NodeController{
 
     //一覧を表示するメソッド
     @GetMapping
-    public String findAll(Model model ,String keyword){
-        List<Node> nodes = nodeService.findAll(keyword);
+    public String findAll(Model model ,String keyword ,Long categoryId){
+        List<Node> nodes = nodeService.findAll(keyword ,categoryId);
+        List<Category> categories = categoryService.findAll();
         model.addAttribute("nodes", nodes);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute("categories", categories);
         return "nodes/list";
     }
 
@@ -77,8 +80,18 @@ public class NodeController{
         nodeForm.setTitle(node.getTitle());
         nodeForm.setContent(node.getContent());
 
+         if (node.getCategory() != null) {
+             nodeForm.setCategoryId(
+                node.getCategory().getId()
+            );
+        }
+
+        List<Category> categories = categoryService.findAll();
+
         model.addAttribute("nodeForm", nodeForm);
         model.addAttribute("nodeId",id);
+
+        model.addAttribute("categories",categories);
 
         return "nodes/edit";
     }
@@ -96,7 +109,12 @@ public class NodeController{
             return "nodes/edit";
         }
 
-        nodeService.update(id, nodeForm.getTitle(), nodeForm.getContent());
+        nodeService.update(
+            id, 
+            nodeForm.getTitle(), 
+            nodeForm.getContent(),
+            nodeForm.getCategoryId()
+        );
         return "redirect:/nodes";
     }
 
